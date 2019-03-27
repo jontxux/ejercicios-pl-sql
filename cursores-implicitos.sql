@@ -14,7 +14,6 @@
 declare
     cont number(4) := 1;
     numero number(2) :=75;
-    par boolean := True;
 begin
     while cont < 11 loop
         if mod(cont, 2)=0 then
@@ -28,9 +27,56 @@ end;
 /
 
 /* v LOOP */
+declare
+    cont number(4) := 1;
+    numero number(2) := 75;
+begin
+    loop
+        if mod(cont, 2)=0 then
+        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(cont)||' DE '||numero||' ES '||TO_CHAR(numero * cont)||' Y ES PAR');
+        else
+        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(cont)||' DE '||numero||' ES '||TO_CHAR(numero * cont)||' Y ES IMPAR');
+        end if;
+        cont := cont + 1;
+    exit when cont > 10;
+    /* DBMS_OUTPUT.PUT_LINE('PROGRAMA FINALIZADO'); -- preguntar porque esto se ejecuta */
+    end loop;
+    DBMS_OUTPUT.PUT_LINE('PROGRAMA FINALIZADO');
+end;
+/
+
+declare
+    cont number(4) := 1;
+    numero number(2) := 75;
+    par varchar2(5);
+begin
+    loop
+        if mod(cont, 2)=0 then
+            par := 'PAR'
+        else
+            par := 'IMPAR'
+        end if;
+        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO ' || TO_CHAR(cont) || ' DE ' || numero || ' ES ' || TO_CHAR(numero * cont) || ' Y ES ' || par);
+        cont := cont + 1;
+    exit when cont > 10;
+    end loop;
+    DBMS_OUTPUT.PUT_LINE('PROGRAMA FINALIZADO');
+end;
+/
 
 /* v FOR */
-
+declare
+    numero number(2) :=75;
+begin
+    for i in 1..10 loop
+        if mod(i, 2)=0 then
+            DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(i)||' DE '||numero||' ES '||TO_CHAR(numero * i)||' Y ES PAR');
+        else
+            DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(i)||' DE '||numero||' ES '||TO_CHAR(numero * i)||' Y ES IMPAR');
+        end if;
+    end loop;
+end;
+/
 
 /* 2. Construir un bloque PL/SQL que escriba en pantalla la cadena ‘ORACLE’ al revés. */
 
