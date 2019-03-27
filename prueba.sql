@@ -1,15 +1,25 @@
 declare
-    cont number(4) := 1;
-    numero number(2) :=75;
-    par boolean := True;
+    mi_resul number(13,2);
+    x1 number(8,2) := &num1;
+    y1 number(8,2) := &num2;
+
+    function suma2(x in number, y in number)
+    return number
+    is
+        resultado number(13,2);
+    begin
+        resultado := x + y;
+        return nvl(resultado, 0);
+    exception
+        when others then
+            return -1;
+    end suma2;
 begin
-    while cont < 11 loop
-        if mod(cont, 2)=0 then
-        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(cont)||' DE '||numero||' ES '||TO_CHAR(numero * cont)||' Y ES PAR');
-        else
-        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(cont)||' DE '||numero||' ES '||TO_CHAR(numero * cont)||' Y ES IMPAR');
-        end if;
-        cont := cont + 1;
-    end loop;
+    mi_resul := suma2(x1, x2);
+    if resul is not null then
+        dbms_output.put_line('La suma es ' || TO_CHAR(resul));
+    else
+        dbms_output.put_line('no podemos sumarlo');
+    end if;
 end;
 /
