@@ -1,19 +1,6 @@
-declare
-    cli number(5);
-    pro number(5);
-begin
-    select count(*) into cli
-    from clientes;
-
-    select count(*) into pro
-    from proveedores;
+/* 7. Crear un procedimiento almacenado de nombre ACTU_TOTAL que dado un código de cliente actualice el campo Total_factura de la tabla Mis_clientes con el importe de las compras que ha realizado. */
+CREATE OR REPLACE PROCEDURE ACTU_TOTAL(COD IN CLIENTES.CLIENTE%TYPE, TOT OUT MIS_CLIENTES.TOTAL_FACTURADO%TYPE)
+IS
+	
+BEGIN
     
-    if cli > pro then
-        dbms_output.put_line('tengo ' || to_char(cli - pro) || ' proveedores mas que clientes');
-    elsif cli < pro then
-        dbms_output.put_line('tengo ' || to_char(pro -cli) || ' clientes mas que proveedores');
-    else
-        dbms_output.put_line('tengo igual numero de clientes y proveedores');
-    end if;
-end;
-/

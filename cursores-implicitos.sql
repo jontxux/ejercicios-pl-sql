@@ -197,18 +197,41 @@ end;
 /
 
 /* 5. Crear un procedimiento almacenado de nombre VER_CLIENTE para consultar los datos relevantes de un cliente (empresa, dirección, población). */
+create or replace procedure ver_cliente(cli in clientes.cliente%type, emp out clientes.empresa%type, dir out clientes.direccion1%type, pob out clientes.poblacion%type)
+is
 
+begin
+    select empresa, direccion1, poblacion into emp, dir, pob
+    from clientes
+    where cliente = cli;
+exception
+    when no_data_found then
+        emp := 'no existe';
+
+end;
+/
 /* Una vez creado y almacenado: */
 
 /* a) Realizar una llamada al procedimiento directamente desde SQL*Plus. */
 
 /* b) Realizar la llamada desde un bloque PL/SQL anónimo. */
-
+declare
+    x clientes.empresa%type;
+    y clientes.direccion1%type;
+    z clientes.poblacion%type;
+    cli number(3) := &client;
+begin
+    ver_cliente(cli, x, y, z);
+    dbms_output.put_line('Los datos del cliente '||to_char(cli)||' son EMPRESA: '||x||' DIRECCION: '||Y||' POBLACION: '||z);
+end;
+/
 /* c) Insertar la excepción NO_DATA_FOUND para poder tratar el caso en que no exista tal código de cliente. */
 
 
 /* 6. Crear desde vuestro usuario una tabla de nombre Mis_clientes a imagen de la tabla Clientes del usuario almacén. */
-
+CREATE OR REPLACE VIEW MIS_CLIENTES
+AS SELECT *
+FROM CLIENTES;
 
 /* 7. Crear un procedimiento almacenado de nombre ACTU_TOTAL que dado un código de cliente actualice el campo Total_factura de la tabla Mis_clientes con el importe de las compras que ha realizado. */
 
