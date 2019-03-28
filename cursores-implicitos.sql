@@ -111,12 +111,62 @@ end;
 /* 3. Utilizando variables de sustitución: (solo para bloques anónimos) */
 
 /* a) Crear un bloque PL/SQL que muestre el precio de venta de un articulo determinado. */
-
+declare
+    artic articulos.articulo%type := &articulo;
+    provee articulos.proveedor%type := &proveedor;
+    precio articulos.pr_vent%type;
+begin
+    select pr_vent into precio
+    from articulos
+    where articulo = artic and proveedor = provee;
+    dbms_output.put_line('El precio de venta de dicho articulo es ' || precio);
+exception 
+    when no_data_found then
+        dbms_output.put_line('No hay ningun articulo');
+end;
+/
 /* b) Otro que devuelva el precio de venta y el de compra de un artículo. */
-
+declare
+    artic articulos.articulo%type := &articulo;
+    provee articulos.proveedor%type := &proveedor;
+    precio articulos.pr_vent%type;
+    comp articulos.pr_cost%type;
+begin
+    select pr_vent, pr_cost into precio, comp
+    from articulos
+    where articulo = artic and proveedor = provee;
+    dbms_output.put_line('El precio de venta de dicho articulo es ' || precio ||' y el precio de compra es ' || comp);
+exception 
+    when no_data_found then
+        dbms_output.put_line('No hay ningun articulo');
+end;
+/
 /* c) Conéctate con tu usuario y crea un bloque PL/SQL que permita dar de alta una provincia con todos sus datos en la tabla provincias. */
+declare
+    provi provincias.provincia%type := &provincia;
+    descr provincias.descripcion%type := '&descripcion';
+    prefi provincias.prefijo%type := &prefijo;
+begin
+    insert into provincias
+    values(provi, descr, prefi);
 
+    exception 
+        when DUP_VAL_ON_INDEX then
+            dbms_output.put_line('ya los tienes insertados');
+end;
+/
+    provi provincias.provincia%type := &provincia;
+    descr provincias.descripcion%type := '&descripcion';
+    prefi provincias.prefijo%type := &prefijo;
+begin
+    insert into provincias
+    values(provi, descr, prefi);
 
+    exception 
+        when DUP_VAL_ON_INDEX then
+            dbms_output.put_line('ya los tienes insertados');
+end;
+/
 /* 4. Escribe un bloque PL/SQL que cuente el número de líneas de las tablas de clientes y proveedores. */
 
 /* Y según lo devuelto muestre por pantalla: */
@@ -126,7 +176,25 @@ end;
 /* TENGO X CLIENTES MÄS QUE PROVEEDORES */
 
 /* TENGO IGUAL NÜMERO DE CLIENTES Y PROVEEDORES */
+declare
+    cli number(5);
+    pro number(5);
+begin
+    select count(*) into cli
+    from clientes;
 
+    select count(*) into pro
+    from proveedores;
+    
+    if cli > pro then
+        dbms_output.put_line('tengo ' || to_char(cli - pro) || ' proveedores mas que clientes');
+    elsif cli < pro then
+        dbms_output.put_line('tengo ' || to_char(pro -cli) || ' clientes mas que proveedores');
+    else
+        dbms_output.put_line('tengo igual numero de clientes y proveedores');
+    end if;
+end;
+/
 
 /* 5. Crear un procedimiento almacenado de nombre VER_CLIENTE para consultar los datos relevantes de un cliente (empresa, dirección, población). */
 

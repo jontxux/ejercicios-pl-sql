@@ -1,12 +1,19 @@
 declare
-    palabra varchar2(10) := 'oracle';
-    invertida varchar2(10);
-    contador number(2) := length('oracle');
+    cli number(5);
+    pro number(5);
 begin
-    while contador > 0 loop
-        invertida := invertida || substr(palabra, contador, 1);
-        contador := contador - 1;
-    end loop;
-    DBMS_OUTPUT.PUT_LINE('oracle al reves es ' || invertida);
+    select count(*) into cli
+    from clientes;
+
+    select count(*) into pro
+    from proveedores;
+    
+    if cli > pro then
+        dbms_output.put_line('tengo ' || to_char(cli - pro) || ' proveedores mas que clientes');
+    elsif cli < pro then
+        dbms_output.put_line('tengo ' || to_char(pro -cli) || ' clientes mas que proveedores');
+    else
+        dbms_output.put_line('tengo igual numero de clientes y proveedores');
+    end if;
 end;
 /
