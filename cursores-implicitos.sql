@@ -229,9 +229,10 @@ end;
 
 
 /* 6. Crear desde vuestro usuario una tabla de nombre Mis_clientes a imagen de la tabla Clientes del usuario almacén. */
-CREATE OR REPLACE VIEW MIS_CLIENTES
+CREATE TABLE MIS_CLIENTES
 AS SELECT *
-FROM CLIENTES;
+FROM CLIENTES
+/
 
 /* 7. Crear un procedimiento almacenado de nombre ACTU_TOTAL que dado un código de cliente actualice el campo Total_factura de la tabla Mis_clientes con el importe de las compras que ha realizado. */
 
