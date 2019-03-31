@@ -141,7 +141,8 @@ exception
         dbms_output.put_line('No hay ningun articulo');
 end;
 /
-/* c) Conéctate con tu usuario y crea un bloque PL/SQL que permita dar de alta una provincia con todos sus datos en la tabla provincias. */
+/* c) Conéctate con tu usuario y crea un bloque PL/SQL que permita dar de alta una provincia con
+ todos sus datos en la tabla provincias. */
 declare
     provi provincias.provincia%type := &provincia;
     descr provincias.descripcion%type := '&descripcion';
@@ -196,7 +197,8 @@ begin
 end;
 /
 
-/* 5. Crear un procedimiento almacenado de nombre VER_CLIENTE para consultar los datos relevantes de un cliente (empresa, dirección, población). */
+/* 5. Crear un procedimiento almacenado de nombre VER_CLIENTE para consultar los datos relevantes de 
+un cliente (empresa, dirección, población). */
 create or replace procedure ver_cliente(cli in clientes.cliente%type, emp out clientes.empresa%type, dir out clientes.direccion1%type, pob out clientes.poblacion%type)
 is
 
@@ -225,18 +227,22 @@ begin
     dbms_output.put_line('Los datos del cliente '||to_char(cli)||' son EMPRESA: '||x||' DIRECCION: '||Y||' POBLACION: '||z);
 end;
 /
-/* c) Insertar la excepción NO_DATA_FOUND para poder tratar el caso en que no exista tal código de cliente. */
+/* c) Insertar la excepción NO_DATA_FOUND para poder tratar el caso en que no
+exista tal código de cliente. */
 
 
-/* 6. Crear desde vuestro usuario una tabla de nombre Mis_clientes a imagen de la tabla Clientes del usuario almacén. */
+/* 6. Crear desde vuestro usuario una tabla de nombre Mis_clientes a imagen de la tabla Clientes
+del usuario almacén. */
 CREATE TABLE MIS_CLIENTES
 AS SELECT *
 FROM CLIENTES
 /
 
-/* 7. Crear un procedimiento almacenado de nombre ACTU_TOTAL que dado un código de cliente actualice el campo Total_factura de la tabla Mis_clientes con el importe de las compras que ha realizado. */
+/* 7. Crear un procedimiento almacenado de nombre ACTU_TOTAL que dado un código de cliente
+actualice el campo Total_factura de la tabla Mis_clientes con el importe de las compras que ha realizado. */
 
-/* a) Comprobando primero que el cliente existe, sino ésta en la tabla Mis_clientes saque un mensaje.(EXCEPTION NO_DATA_FOUND) */
+/* a) Comprobando primero que el cliente existe, sino ésta en la tabla Mis_clientes saque
+un mensaje.(EXCEPTION NO_DATA_FOUND) */
 
 /* EL CLIENTE X NO EXISTE */
 
@@ -247,18 +253,107 @@ FROM CLIENTES
 /* c) En otro caso, actualizarlo y sacar un mensaje diciendo: */
 
 /* EL CLIENTE X HA SIDO ACTUALIZADO CON XXXXX EUROS */
+-- 20/9     PL/SQL: SQL Statement ignored
+-- 20/20    PL/SQL: ORA-00909: invalid number of arguments
+CREATE OR REPLACE PROCEDURE ACTU_TOTAL(COD IN NUMBER)
+IS
+    TOTAL MIS_CLIENTES.TOTAL_FACTURA%TYPE;
+    EXISTE MIS_CLIENTES.CLIENTE%TYPE;
+    COMPRAS NUMBER(11,2);
+BEGIN
+    SELECT COUNT(*) INTO EXISTE
+    FROM MIS_CLIENTES
+    WHERE CLIENTE = COD;
+
+    SELECT COUNT(*) INTO COMPRAS
+    FROM ALBARANES
+    WHERE CLIENTE = COD;
+
+    IF EXISTE = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('EL CLIENTE ' || TO_CHAR(COD) || 'NO EXISTE');
+    ELSIF COMPRAS = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('EL CLIENTE ' || TO_CHAR(COD) || 'NO TIENE COMPRAS');
+    ELSE
+        SELECT SUM(NVL(CANTIDAD * PRECIO * (1 - DESCUENTO / 100))) INTO TOTAL
+        FROM LINEAS, ALBARANES
+        WHERE ALBARANES.ALBARAN = LINEAS.ALBARAN
+        AND CLIENTE = COD;
+
+        UPDATE MIS_CLIENTES
+        SET TOTAL_FACTURA = TOTAL
+        WHERE CLIENTE = COD;
+
+        DBMS_OUTPUT.PUT_LINE('EL CLIENTE' || TO_CHAR(COD) || 'HA SIDO ACTUALIZADO');
+    END IF;
+
+END ACTU_TOTAL;
+/
 
 
 
 
-
-/* 8. Crear un procedimiento almacenado de nombre NUEVA_PROV que dados un código, descripción y prefijo, inserte con ellos una provincia nueva. */
+/* 8. Crear un procedimiento almacenado de nombre NUEVA_PROV que dados un código,
+descripción y prefijo, inserte con ellos una provincia nueva. */
 
 /* (Tratar la excepción DUP_VAL_ON_INDEX) */
+CREATE OR REPLACE PROCEDURE NUEVA_PROV(PROVINCIA IN NUMBER, DESCRIPCION IN VARCHAR2, PREFIJO IN NUMBER)
+IS 
+BEGIN
+    INSERT INTO PROVINCIAS
+    VALUES (PROVINCIA, DESCRIPCION, PREFIJO);
+
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            DBMS_OUTPUT.PUT_LINE('ESA PROVINCIA YA EXISTE METE ALGO VALIDO');
+END NUEVA_PROV;
+/
+
+CREATE OR REPLACE PROCEDURE NUEVA_PROV
+IS
+    PROV PROVINICAS.PROVINCIA%TYPE;
+    DESCR PROVINICAS.DESCRIPCION%TYPE;
+    PREF PROVINCIAS.PREFIJO%TYPE;
+    EXISTE BOOLEAN := TRUE;
+BEGIN
+    LOOP
+        PROV := &PROVINCIA
+        EXCEPTION
+            WHEN DUP_VAL_ON_INDEX THEN
+                DBMS_OUTPUT.PUT_LINE('ESA PROVINCIA YA EXISTE METE ALGO VALIDO');
+                EXISTE := FALSE;
+        EXIT WHEN EXISTE = FALSE;
+    END LOOP;
+
+    DESCR := '&DESCRIPCION'
+    PREFIJO := &PREFIJO
+
+    INSERT INTO PROVINCIAS
+    VALUES(PROV, DESCR, PREFIJO)
+
+END NUEVA_PROV;
+/
 
 
+/* 9. Desarrollar una función de nombre DIF_FECHAS que devuelva el número de años completos que hay
+entre dos fechas que se pasan como parámetro. */ 
+CREATE OR REPLACE FUNCTION DIF_FECHAS(FECHA1 IN DATE, FECHA2 IN DATE)
+RETURN NUMBER
+IS
+    DIF NUMBER(5);
+BEGIN
+    DIF := ABS(TO_NUMBER(TO_CHAR(FECHA1, 'YYYY')) - TO_NUMBER(TO_CHAR(FECHA2, 'YYYY')));
+    RETURN DIF;
+END DIF_FECHAS;
+/
 
-/* 9. Desarrollar una función de nombre DIF_FECHAS que devuelva el número de años completos que hay entre dos fechas que se pasan como parámetro. */ 
+-- ERROR AL PROBAR
+DECLARE
+    DIF NUMBER(11);
+BEGIN
+    DIF := DIF_FECHAS(TO_DATE('01/01/1999', 'DD/MM/YYYY'), TO_DATE('01/01/2007', 'DD/MM/YYYY'))
+    DBMS_OUTPUT.PUT_LINE(DIF);
+END;
+/
 
 /*  10. Implementar un procedimiento de nombre CAMBIO_DIVISA que reciba un importe y visualice el desglose del cambio en unidades monetarias de 1,2,5,10,20,50 ctms de € y 1, 2, 5,10,20,50,100 € en orden inverso al que aquí aparecen enumeradas. */
 
@@ -267,10 +362,23 @@ FROM CLIENTES
 /* 11. Crear un procedimiento de nombre BORRAR_CLIENTE que permita borrar de la tabla Mis_clientes un cliente, cuyo número se pasará en la llamada. */
 
 /* (Tratar excepción NO_DATA_FOUND) */
+CREATE OR REPLACE PROCEDURE BORRAR_CLIENTE(COD IN NUMBER)
+IS
+BEGIN
+    DELETE FROM CLIENTES
+    WHERE CLIENTE = COD;
 
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE("EL CLIENTE "||COD||" NO SE ENCUENTRA EN LA BASE DE DATOS");
+END BORRAR_CLIENTE;
+/
 
-
-/* 12. Escribir un procedimiento de nombre DOS_PROVI que dados dos códigos de provincia devuelva lo facturado por cada una de ellas y su diferencia. En el caso en que no hayan facturado o no existan las provincias obtengamos el mensaje correspondiente. */
+/* 12. Escribir un procedimiento de nombre DOS_PROVI que dados dos códigos de provincia devuelva lo facturado por cada una de ellas y
+su diferencia. En el caso en que no hayan facturado o no existan las provincias obtengamos el mensaje correspondiente. */
+CREATE OR REPLACE PROCEDURE DOS_PROVI(PRO1 IN NUMBER, PRO2 IN NUMBER, DIF OUT NUMBER, FAC1 OUT NUMBER, FAC2 OUT NUMBER)
+IS
+BEGIN
 
 /* Realizar la llamada a una función de nombre UN_PROVI que calcule lo facturado para una provincia. */
 
