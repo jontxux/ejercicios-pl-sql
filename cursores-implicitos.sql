@@ -253,8 +253,6 @@ un mensaje.(EXCEPTION NO_DATA_FOUND) */
 /* c) En otro caso, actualizarlo y sacar un mensaje diciendo: */
 
 /* EL CLIENTE X HA SIDO ACTUALIZADO CON XXXXX EUROS */
--- 20/9     PL/SQL: SQL Statement ignored
--- 20/20    PL/SQL: ORA-00909: invalid number of arguments
 CREATE OR REPLACE PROCEDURE ACTU_TOTAL(COD IN NUMBER)
 IS
     TOTAL MIS_CLIENTES.TOTAL_FACTURA%TYPE;
@@ -379,9 +377,33 @@ su diferencia. En el caso en que no hayan facturado o no existan las provincias 
 CREATE OR REPLACE PROCEDURE DOS_PROVI(PRO1 IN NUMBER, PRO2 IN NUMBER, DIF OUT NUMBER, FAC1 OUT NUMBER, FAC2 OUT NUMBER)
 IS
 BEGIN
+    FAC1 := UN_PROVI(PRO1);
+    FAC2 := UN_PROVI(PRO2);
+    DIF := FAC2 - FAC1;  
+
 
 /* Realizar la llamada a una función de nombre UN_PROVI que calcule lo facturado para una provincia. */
+CREATE OR REPLACE FUNCTION UN_PROVI(PRO IN NUMBER)
+RETURN NUMBER
+IS 
+    TOT MIS_CLIENTES.TOTAL_FACTURA%TYPE;
+    EXISTE NUMBER(5);
+BEGIN
+    SELECT SUM(TOTAL_FACTURA) INTO TOT
+    FROM CLIENTES
+    WHERE PRO = PROVINCIA;
 
+    SELECT COUNT(*) INTO EXISTE
+    FROM CLIENTES
+    WHERE PRO = PROVINCIAS;
+
+    IF EXISTE = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('NO HAY CLIENTES ASIGNADA A LA PROVINCIA' || TO_CHAR(PRO));
+    ELSE
+        RETURN TOT;
+    END IF;
+END UN_PROVI;
+/
 
 
 /* 13. Crear una función de nombre CALCULA_FACT que dada una fecha devuelva el total facturado hasta la misma entre los albaranes (según fecha de albarán). */
