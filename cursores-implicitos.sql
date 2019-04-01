@@ -580,11 +580,41 @@ END DOS_PROVI;
 
 
 /* 13. Crear una función de nombre CALCULA_FACT que dada una fecha devuelva el total facturado hasta la misma entre los albaranes (según fecha de albarán). */
-
+CREATE OR REPLACE FUNCTION CALCULA_FACT(FECHA IN DATE)
+RETURN NUMBER
+IS
+    TOTAL NUMBER(12, 2) := NULL;
+BEGIN
+    SELECT SUM(NVL(PRECIO * CANTIDAD * (1 - DESCUENTO / 100)), 0) INTO TOTAL
+    FROM LINEAS, ALBARANES
+    WHERE FECHA_ALBARAN < FECHA;
+    RETURN TOTAL;
+END CALCULA_FACT;
 
 
 /* 14. Crear una función de nombre CUANTAS_EXIS que devuelva el total de existencias existentes en nuestro almacén. */
-
+CREATE OR REPLACE FUNCTION CUANTAS_EXIS
+RETURN NUMBER
+IS
+    TOTAL NUMBER(12, 2) := NULL;
+BEGIN
+    SELECT SUM(NVL(EXISTENCIAS), 0) INTO TOTAL
+    FROM ARTICULOS;
+    RETURN TOTAL;
+END CUANTAS_EXIS;
+/
 
 
 /* 15. Modificar la función anterior para que calcule el total de existencias pero para los artículos de un tipo de unidad de medida específico, que se pasará como parámetro. */
+CREATE OR REPLACE FUNCTION CUANTAS_EXIS(TIPO IN VARCHAR2)
+RETURN NUMBER
+IS
+    TOTAL NUMBER(12, 2) := NULL;
+BEGIN
+    SELECT SUM(NVL(EXISTENCIAS), 0) INTO TOTAL
+    FROM ARTICULOS, UNIDADES
+    WHERE UNIDADES.UNIDAD = ARTICULOS.UNIDAD
+    AND UNIDADES.DESCRIPCION = TIPO;
+    RETURN TOTAL;
+END CUANTAS_EXIS;
+/
