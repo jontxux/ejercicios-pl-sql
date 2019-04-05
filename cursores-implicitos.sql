@@ -11,71 +11,71 @@
 /* Hacerlo con las diferentes cláusulas iterativas existentes: */
 
 /* v WHILE */
-declare
-    cont number(4) := 1;
-    numero number(2) :=75;
-begin
-    while cont < 11 loop
-        if mod(cont, 2)=0 then
-        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(cont)||' DE '||numero||' ES '||TO_CHAR(numero * cont)||' Y ES PAR');
-        else
-        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(cont)||' DE '||numero||' ES '||TO_CHAR(numero * cont)||' Y ES IMPAR');
-        end if;
-        cont := cont + 1;
-    end loop;
-end;
+DECLARE
+    CONT NUMBER(4) := 1;
+    NUMERO NUMBER(2) :=75;
+BEGIN
+    whiLE CONT < 11 LOOP
+        IF MOD(CONT, 2)=0 THEN
+        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(CONT)||' DE '||NUMERO||' ES '||TO_CHAR(NUMERO * CONT)||' Y ES PAR');
+        ELSE
+        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(CONT)||' DE '||NUMERO||' ES '||TO_CHAR(NUMERO * CONT)||' Y ES IMPAR');
+        END IF;
+        CONT := CONT + 1;
+    END LOOP;
+END;
 /
 
-/* v LOOP */
-declare
-    cont number(4) := 1;
-    numero number(2) := 75;
-begin
-    loop
-        if mod(cont, 2)=0 then
-        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(cont)||' DE '||numero||' ES '||TO_CHAR(numero * cont)||' Y ES PAR');
-        else
-        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(cont)||' DE '||numero||' ES '||TO_CHAR(numero * cont)||' Y ES IMPAR');
-        end if;
-        cont := cont + 1;
-    exit when cont > 10;
+/* V LOOP */
+DECLARE
+    CONT NUMBER(4) := 1;
+    NUMERO NUMBER(2) := 75;
+BEGIN
+    LOOP
+        IF MOD(CONT, 2)=0 THEN
+        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(CONT)||' DE '||NUMERO||' ES '||TO_CHAR(NUMERO * CONT)||' Y ES PAR');
+        ELSE
+        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(CONT)||' DE '||NUMERO||' ES '||TO_CHAR(NUMERO * CONT)||' Y ES IMPAR');
+        END IF;
+        CONT := CONT + 1;
+    EXIT WHEN CONT > 10;
     /* DBMS_OUTPUT.PUT_LINE('PROGRAMA FINALIZADO'); -- preguntar porque esto se ejecuta */
-    end loop;
+    END LOOP;
     DBMS_OUTPUT.PUT_LINE('PROGRAMA FINALIZADO');
-end;
+END;
 /
 
-declare
-    cont number(4) := 1;
-    numero number(2) := 75;
-    par varchar2(5);
-begin
-    loop
-        if mod(cont, 2)=0 then
-            par := 'PAR'
-        else
-            par := 'IMPAR'
-        end if;
-        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO ' || TO_CHAR(cont) || ' DE ' || numero || ' ES ' || TO_CHAR(numero * cont) || ' Y ES ' || par);
-        cont := cont + 1;
-    exit when cont > 10;
-    end loop;
+DECLARE
+    CONT NUMBER(4) := 1;
+    NUMERO NUMBER(2) := 75;
+    PAR VARCHAR2(5);
+BEGIN
+    LOOP
+        IF MOD(CONT, 2)=0 THEN
+            PAR := 'PAR'
+        ELSE
+            PAR := 'IMPAR'
+        END IF;
+        DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO ' || TO_CHAR(CONT) || ' DE ' || NUMERO || ' ES ' || TO_CHAR(NUMERO * CONT) || ' Y ES ' || PAR);
+        CONT := CONT + 1;
+    EXIT WHEN CONT > 10;
+    END LOOP;
     DBMS_OUTPUT.PUT_LINE('PROGRAMA FINALIZADO');
-end;
+END;
 /
 
 /* v FOR */
-declare
-    numero number(2) :=75;
-begin
-    for i in 1..10 loop
-        if mod(i, 2)=0 then
-            DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(i)||' DE '||numero||' ES '||TO_CHAR(numero * i)||' Y ES PAR');
-        else
-            DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(i)||' DE '||numero||' ES '||TO_CHAR(numero * i)||' Y ES IMPAR');
-        end if;
-    end loop;
-end;
+decLARE
+    NUMERO NUMBER(2) :=75;
+BEGIN
+    FOR I IN 1..10 LOOP
+        IF MOD(I, 2)=0 THEN
+            DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(I)||' DE '||NUMERO||' ES '||TO_CHAR(NUMERO * I)||' Y ES PAR');
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('EL MULTIPLO NUMERO '||TO_CHAR(I)||' DE '||NUMERO||' ES '||TO_CHAR(NUMERO * I)||' Y ES IMPAR');
+        END IF;
+    END LOOP;
+END;
 /
 
 /* 2. Construir un bloque PL/SQL que escriba en pantalla la cadena ‘ORACLE’ al revés. */
@@ -83,90 +83,90 @@ end;
 /* Utilizando bucles: */
 
 /* v WHILE */
-declare
-    palabra varchar2(10) := 'oracle';
-    invertida varchar2(10);
-    contador number(2) := length('oracle');
-begin
-    while contador > 0 loop
-        invertida := invertida || substr(palabra, contador, 1);
-        contador := contador - 1;
-    end loop;
-    DBMS_OUTPUT.PUT_LINE('oracle al reves es ' || invertida);
-end;
+DECLARE
+    PALABRA VARCHAR2(10) := 'ORACLE';
+    INVERTIDA VARCHAR2(10);
+    CONTADOR NUMBER(2) := LENGTH('ORACLE');
+BEGIN
+    WHILE CONTADOR > 0 LOOP
+        INVERTIDA := INVERTIDA || SUBSTR(PALABRA, CONTADOR, 1);
+        CONTADOR := CONTADOR - 1;
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE('ORACLE AL REVES ES ' || INVERTIDA);
+END;
 /
 
-/* v FOR */
-declare
-    palabra varchar2(10) := 'oracle';
-    invertida varchar2(10);
-begin
-    for i in reverse 1..length(palabra) loop
-        invertida := invertida || substr(palabra, i, 1);
-    end loop;
-    DBMS_OUTPUT.PUT_LINE(invertida);
-end;
+/* V FOR */
+DECLARE
+    PALABRA VARCHAR2(10) := 'ORACLE';
+    INVERTIDA VARCHAR2(10);
+BEGIN
+    FOR I IN REVERSE 1..LENGTH(PALABRA) LOOP
+        INVERTIDA := INVERTIDA || SUBSTR(PALABRA, I, 1);
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE(INVERTIDA);
+END;
 /
 
 /* 3. Utilizando variables de sustitución: (solo para bloques anónimos) */
 
 /* a) Crear un bloque PL/SQL que muestre el precio de venta de un articulo determinado. */
-declare
-    artic articulos.articulo%type := &articulo;
-    provee articulos.proveedor%type := &proveedor;
-    precio articulos.pr_vent%type;
-begin
-    select pr_vent into precio
-    from articulos
-    where articulo = artic and proveedor = provee;
-    dbms_output.put_line('El precio de venta de dicho articulo es ' || precio);
-exception 
-    when no_data_found then
-        dbms_output.put_line('No hay ningun articulo');
-end;
+DECLARE
+    ARTIC ARTICULOS.ARTICULO%TYPE := &ARTICULO;
+    PROVEE ARTICULOS.PROVEEDOR%TYPE := &PROVEEDOR;
+    PRECIO ARTICULOS.PR_VENT%TYPE;
+BEGIN
+    SELECT PR_VENT INTO PRECIO
+    FROM ARTICULOS
+    WHERE ARTICULO = ARTIC AND PROVEEDOR = PROVEE;
+    DBMS_OUTPUT.PUT_LINE('EL PRECIO DE VENTA DE DICHO ARTICULO ES ' || PRECIO);
+EXCEPTION 
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('NO HAY NINGUN ARTICULO');
+END;
 /
 /* b) Otro que devuelva el precio de venta y el de compra de un artículo. */
-declare
-    artic articulos.articulo%type := &articulo;
-    provee articulos.proveedor%type := &proveedor;
-    precio articulos.pr_vent%type;
-    comp articulos.pr_cost%type;
-begin
-    select pr_vent, pr_cost into precio, comp
-    from articulos
-    where articulo = artic and proveedor = provee;
-    dbms_output.put_line('El precio de venta de dicho articulo es ' || precio ||' y el precio de compra es ' || comp);
-exception 
-    when no_data_found then
-        dbms_output.put_line('No hay ningun articulo');
-end;
+DECLARE
+    ARTIC ARTICULOS.ARTICULO%TYPE := &ARTICULO;
+    PROVEE ARTICULOS.PROVEEDOR%TYPE := &PROVEEDOR;
+    PRECIO ARTICULOS.PR_VENT%TYPE;
+    COMP ARTICULOS.PR_COST%TYPE;
+BEGIN
+    SELECT PR_VENT, PR_COST INTO PRECIO, COMP
+    FROM ARTICULOS
+    WHERE ARTICULO = ARTIC AND PROVEEDOR = PROVEE;
+    DBMS_OUTPUT.PUT_LINE('EL PRECIO DE VENTA DE DICHO ARTICULO ES ' || PRECIO ||' Y EL PRECIO DE COMPRA ES ' || COMP);
+EXCEPTION 
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('NO HAY NINGUN ARTICULO');
+END;
 /
 /* c) Conéctate con tu usuario y crea un bloque PL/SQL que permita dar de alta una provincia con
  todos sus datos en la tabla provincias. */
-declare
-    provi provincias.provincia%type := &provincia;
-    descr provincias.descripcion%type := '&descripcion';
-    prefi provincias.prefijo%type := &prefijo;
-begin
-    insert into provincias
-    values(provi, descr, prefi);
+DECLARE
+    PROVI PROVINCIAS.PROVINCIA%TYPE := &PROVINCIA;
+    DESCR PROVINCIAS.DESCRIPCION%TYPE := '&DESCRIPCION';
+    PREFI PROVINCIAS.PREFIJO%TYPE := &PREFIJO;
+BEGIN
+    INSERT INTO PROVINCIAS
+    VALUES(PROVI, DESCR, PREFI);
 
-    exception 
-        when DUP_VAL_ON_INDEX then
-            dbms_output.put_line('ya los tienes insertados');
-end;
+    EXCEPTION 
+        WHEN DUP_VAL_ON_INDEX THEN
+            DBMS_OUTPUT.PUT_LINE('YA LOS TIENES INSERTADOS');
+END;
 /
-    provi provincias.provincia%type := &provincia;
-    descr provincias.descripcion%type := '&descripcion';
-    prefi provincias.prefijo%type := &prefijo;
-begin
-    insert into provincias
-    values(provi, descr, prefi);
+    PROVI PROVINCIAS.PROVINCIA%TYPE := &PROVINCIA;
+    DESCR PROVINCIAS.DESCRIPCION%TYPE := '&DESCRIPCION';
+    PREFI PROVINCIAS.PREFIJO%TYPE := &PREFIJO;
+BEGIN
+    INSERT INTO PROVINCIAS
+    VALUES(PROVI, DESCR, PREFI);
 
-    exception 
-        when DUP_VAL_ON_INDEX then
-            dbms_output.put_line('ya los tienes insertados');
-end;
+    EXCEPTION 
+        WHEN DUP_VAL_ON_INDEX THEN
+            DBMS_OUTPUT.PUT_LINE('YA LOS TIENES INSERTADOS');
+END;
 /
 /* 4. Escribe un bloque PL/SQL que cuente el número de líneas de las tablas de clientes y proveedores. */
 
@@ -177,55 +177,55 @@ end;
 /* TENGO X CLIENTES MÄS QUE PROVEEDORES */
 
 /* TENGO IGUAL NÜMERO DE CLIENTES Y PROVEEDORES */
-declare
-    cli number(5);
-    pro number(5);
-begin
-    select count(*) into cli
-    from clientes;
+DECLARE
+    CLI NUMBER(5);
+    PRO NUMBER(5);
+BEGIN
+    SELECT COUNT(*) INTO CLI
+    FROM CLIENTES;
 
-    select count(*) into pro
-    from proveedores;
+    SELECT COUNT(*) INTO PRO
+    FROM PROVEEDORES;
     
-    if cli > pro then
-        dbms_output.put_line('tengo ' || to_char(cli - pro) || ' proveedores mas que clientes');
-    elsif cli < pro then
-        dbms_output.put_line('tengo ' || to_char(pro -cli) || ' clientes mas que proveedores');
-    else
-        dbms_output.put_line('tengo igual numero de clientes y proveedores');
-    end if;
-end;
+    IF CLI > PRO THEN
+        DBMS_OUTPUT.PUT_LINE('TENGO ' || TO_CHAR(CLI - PRO) || ' PROVEEDORES MAS QUE CLIENTES');
+    ELSIF CLI < PRO THEN
+        DBMS_OUTPUT.PUT_LINE('TENGO ' || TO_CHAR(PRO -CLI) || ' CLIENTES MAS QUE PROVEEDORES');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('TENGO IGUAL NUMERO DE CLIENTES Y PROVEEDORES');
+    END IF;
+END;
 /
 
 /* 5. Crear un procedimiento almacenado de nombre VER_CLIENTE para consultar los datos relevantes de 
 un cliente (empresa, dirección, población). */
-create or replace procedure ver_cliente(cli in clientes.cliente%type, emp out clientes.empresa%type, dir out clientes.direccion1%type, pob out clientes.poblacion%type)
-is
+CREATE OR REPLACE PROCEDURE VER_CLIENTE(CLI IN CLIENTES.CLIENTE%TYPE, EMP OUT CLIENTES.EMPRESA%TYPE, DIR OUT CLIENTES.DIRECCION1%TYPE, POB OUT CLIENTES.POBLACION%TYPE)
+IS
 
-begin
-    select empresa, direccion1, poblacion into emp, dir, pob
-    from clientes
-    where cliente = cli;
-exception
-    when no_data_found then
-        emp := 'no existe';
+BEGIN
+    SELECT EMPRESA, DIRECCION1, POBLACION INTO EMP, DIR, POB
+    FROM CLIENTES
+    WHERE CLIENTE = CLI;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        EMP := 'NO EXISTE';
 
-end;
+END;
 /
 /* Una vez creado y almacenado: */
 
 /* a) Realizar una llamada al procedimiento directamente desde SQL*Plus. */
 
 /* b) Realizar la llamada desde un bloque PL/SQL anónimo. */
-declare
-    x clientes.empresa%type;
-    y clientes.direccion1%type;
-    z clientes.poblacion%type;
-    cli number(3) := &client;
-begin
-    ver_cliente(cli, x, y, z);
-    dbms_output.put_line('Los datos del cliente '||to_char(cli)||' son EMPRESA: '||x||' DIRECCION: '||Y||' POBLACION: '||z);
-end;
+DECLARE
+    X CLIENTES.EMPRESA%TYPE;
+    Y CLIENTES.DIRECCION1%TYPE;
+    Z CLIENTES.POBLACION%TYPE;
+    CLI NUMBER(3) := &CLIENT;
+BEGIN
+    VER_CLIENTE(CLI, X, Y, Z);
+    DBMS_OUTPUT.PUT_LINE('LOS DATOS DEL CLIENTE '||TO_CHAR(CLI)||' SON EMPRESA: '||X||' DIRECCION: '||Y||' POBLACION: '||Z);
+END;
 /
 /* c) Insertar la excepción NO_DATA_FOUND para poder tratar el caso en que no
 exista tal código de cliente. */
