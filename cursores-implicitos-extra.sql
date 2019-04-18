@@ -118,7 +118,7 @@ IS
 TOTAL NUMBER(13);
 EXISTE CLIENTES.EMPRESA%TYPE;
 BEGIN
-	SELECT EMPRESA INTO EXISTE
+	SELECT DISTINCT EMPRESA INTO EXISTE
 	FROM CLIENTES
 	WHERE EMP = EMPRESA;
 
@@ -132,11 +132,6 @@ EXCEPTION
 	WHEN NO_DATA_FOUND THEN
 		 DBMS_OUTPUT.PUT_LINE('NO HAY NINGUN CLIENTE CON ESA EMPRESA');
 		 TOTAL := -1;
-		 RETURN TOTAL;
-
-	WHEN TOO_MANY_ROWS THEN
-		 DBMS_OUTPUT.PUT_LINE('HAY MAS DE UN CLIENTE CON ESA EMPRESA');
- 		 TOTAL := -2;
 		 RETURN TOTAL;
 
 END CLIENARTI;
@@ -163,7 +158,25 @@ BEGIN
 	TOTAL := CLIENARTI(EMPR);
 	IF TOTAL > 20 THEN
 	   DECLARE
-			;
+	   	   CUANTOS LINEAS.CANTIDAD%TYPE;
+		   FECHA DATE;
+	   BEGIN
+			SELECT COUNT(*) INTO CUANTOS
+			FROM HABITUALES
+			WHERE EMPRESA = EMPR;
+
+			IF CUANTOS = 0 THEN
+		   	   INSERT INTO HABITUALES(EMPRESA, FECHA_ULT, CANTIDAD_ART)
+		   	   SELECT EMPRESA, MAX(FECHA_ALBARAN), SUM(CANTIDAD)
+		   	   FROM CLIENTES, ALBARANES, LINEAS
+		   	   WHERE EMPRESA = EMPR;
+			ELSE
+				UPDATE HABITUALES
+				SET FECHA_ULT = SYSDATE, CANTIDAD_ART = CANTIDAD_ART + CANTIDAD
+				WHERE EMPRESA = EMPR;
+			END IF;
+		END;
+	END IF;
 END;
 /
 
@@ -185,24 +198,55 @@ END;
 
  
 
-Crear un procedimiento de nombre ACTUALBA que dado un número de albarán y una fecha modifique la fecha de pago de dicho albarán. Si la fecha es nula, se actualizará con la actual.
-Validar la fecha para que no sea superior a la actual ni inferior al año 2000.
+-- 5.Crear un procedimiento de nombre ACTUALBA que dado un número de albarán y una fecha modifique la fecha de pago de dicho albarán. Si la fecha es nula, se actualizará con la actual.
+-- Validar la fecha para que no sea superior a la actual ni inferior al año 2000.
+CREATE OR REPLACE PROCEDURE ACTUALBA(COD IN NUMBER, FEC IN DATE)
+IS
+	ALB ALBARANES.ALBARAN%TYPE;
+BEGIN
+	SELECT ALBARAN INTO ALB
+	FROM ALBARANES
+	WHERE ALBARAN = COD;
+
+	UPDATE ALBARANES
+	SET FECHA_PAGO = FEC
+	WHERE ALBARAN = COD;
+
+EXCEPTION
+	WHEN NO_DATA_FOUND THEN
+		DBMS_OUTPUT.PUT_LINE('NO EXISTE ESE ALBARAN');
+END ACTUALBA;
+/
+
+DECLARE
+	FECHA DATE;
+	AINO NUMBER(6);
+	ACTUAL NUMBER(6) := TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY'));
+BEGIN
+	LOOP
+		DBMS_OUTPUT.PUT_LINE('INTRODUCE UNA FECHA ENTRE EL AÑO 2000 Y LA ACTUAL');
+		FECHA := TO_DATE('&FECHA', 'DD/MM/YYYY');
+		AINO := TO_NUMBER(TO_CHAR(FECHA, 'YYYY'));
+	EXIT WHEN AINO > 2000 AND AINO <= ACTUAL;
+	END LOOP;
+
+	ACTUALBA('&ALBARAN', FECHA);
+END;
+/
 
  
 
- 
+-- Modificar el procedimiento anterior para que inserte en una tabla de nombre ALBACTU los valores antiguos y nuevos de los albaranes actualizados.
 
-Modificar el procedimiento anterior para que inserte en una tabla de nombre ALBACTU los valores antiguos y nuevos de los albaranes actualizados.
- 
 
- 
 
-Descripción Tabla Albactu:
 
- Columna Tipo
+-- Descripción Tabla Albactu:
 
- Albaran Number(3) not null
+--  Columna Tipo
 
- Fecha_antigua Fecha
+--  Albaran Number(3) not null
 
- Fecha_nueva  Fecha
+--  Fecha_antigua Fecha
+
+--  Fecha_nueva  Fecha
