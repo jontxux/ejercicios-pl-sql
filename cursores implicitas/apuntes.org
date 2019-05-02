@@ -1,0 +1,10 @@
+apuntes de cursores
+| <20>                 | PROVINCIA | DESCRIPCION | PREFIJO |
+| EMPIEZA CURSOR ->    |         1 | ALAVA       |     945 |
+| SI MI_CURSOR%FOUND TRUE AVANZA |         2 | ALBACETE    |     968 |
+| """""""""""""""""""" |         3 | AVILA       |     926 |
+|----------------------+-----------+-------------+---------|
+| SI MI_CURSOR%FOUND   |      NADA | TERMINA     |   BUCLE |
+FETCH MI_CURSOR INTO MIREG;
+WHILE MI_CURSOR%FOUND LOOP;
+    FETCH MI_CURSOR INTO MIREG;
