@@ -1,3 +1,5 @@
+* prueba
+** esto es sql
 apuntes de cursores
 | <20>                 | PROVINCIA | DESCRIPCION | PREFIJO |   |
 | EMPIEZA CURSOR ->    |         1 | ALAVA       |     945 |   |
@@ -11,3 +13,6 @@ apuntes de cursores
 FETCH MI_CURSOR INTO MIREG;
 WHILE MI_CURSOR%FOUND LOOP;
     FETCH MI_CURSOR INTO MIREG;
+** seguimos probando
+*** tercera subdivision
+prueba
