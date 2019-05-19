@@ -1,0 +1,2 @@
+* Enlaces de interes
+[[https://elbauldelprogramador.com/plsql-excepciones/][triggers EXCEPCIONES(RAISE) baul del programador]]
