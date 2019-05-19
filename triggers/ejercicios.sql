@@ -159,3 +159,34 @@ EXCEPTION
 
 END;
 
+-- 16. Crear un trigger de nombre CONTROL_ALBA que no permita que un albarán contenga una fecha de pago superior a su fecha de albarán. Sólo para aquellos cuya fecha de envío pertenezca al año en curso.
+CREATE OR REPLACE TRIGGER CONTROL_ALBA
+BEFORE UDPATE
+ON ALBARANES
+FOR EACH ROW
+
+DECLARE
+FECHA_SUPERIOR EXCEPTION;
+BEGIN
+	
+	IF UPDATING('FECHA_PAGO') AND :NEW.FECHA_PAGO < FECHA_ALBARAN AND TO_CHAR(:OLD.FECHA_ENVIO, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') THEN
+	    RAISE FECHA_SUPERIOR;
+	END IF;
+
+EXCEPTION
+	WHEN FECHA_SUPERIOR THEN
+		 DBMS_OUTPUT.PUT_LINE('LA FECHA INTRODUCIDA ES MAYOR QUE A LA FECHA DEL ALBARAN');
+END;
+
+-- 17. Definir un bloque PL/SQL que seleccione las descripciones de las provincias, con el número de clientes que les pertenecen.
+
+-- Vaya guardando la información en una variable tipo tabla PL/SQL.
+
+-- Y una vez guardados en dicha variable, los vaya leyendo y sacando por pantalla.
+
+-- (Realizar el mismo ejercicio con VARRAY’s)
+
+
+-- 18. Guardar en dos tablas PL/SQL los códigos de cliente y los códigos de proveedor.
+
+-- Posteriormente comparar su información y sacar por pantalla aquellos códigos que coincidan en ambas tablas PL/SQL.
