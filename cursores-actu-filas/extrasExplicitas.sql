@@ -256,6 +256,10 @@ CREATE TABLE AUDITAR_CLIENTES(
 
 -- b.    Dada de alta la tabla de auditación. Crear un procedimiento almacenado de nombre AUDITAR_CLIENTES_PROC, tal que para cada uno de los clientes existentes en nuestra base de datos (tabla CLIENTES) realice lo siguiente:
 CREATE OR REPLACE PROCEDURE AUDITAR_CLIENTES_PROC
+	
+
+
+CREATE OR REPLACE PROCEDURE AUDITAR_CLIENTES_PROC
 
 	CURSOR CONSULTA IS
 		SELECT CLIENTE, EMPRESA, TOTAL_FACTURADO
