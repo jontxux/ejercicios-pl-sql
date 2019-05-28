@@ -535,6 +535,7 @@ EXCEPTION
         INSERT INTO AUDITAR
         VALUES(TO_CHAR(SYSDATE, 'DD/MM/YYYY HH:MI:SS')||' '||TO_CHAR(:NEW.PROVEEDOR)||' '||TO_CHAR(:NEW.PROVINCIA));
 END;
+/
 
 --  8. Crear un trigger de nombre MIS_FECHAS que controle la inserción de la cabecera de cada albarán siempre que alguna de las fechas sea nula y proceda de la siguiente manera:
 
@@ -557,3 +558,4 @@ BEGIN
         :NEW.FECHA_ENVIO = SYSDATE;
     END IF;
 END;
+/
